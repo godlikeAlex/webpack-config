@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 
 const plugins = [
   new HtmlWebpackPlugin({
@@ -12,25 +12,11 @@ const plugins = [
     filename: 'index.css'
   }),
   new webpack.HotModuleReplacementPlugin(),
-  new ImageMinimizerPlugin({
-    minimizerOptions: {
-      plugins: [
-        ['gifsicle', { interlaced: true }],
-        ['jpegtran', { progressive: true }],
-        ['optipng', { optimizationLevel: 6 }],
-        [
-          'svgo',
-          {
-            plugins: [
-              {
-                removeViewBox: false,
-              },
-            ],
-          },
-        ],
-      ],
-    },
-  }),
+  new CopyPlugin({
+    patterns: [
+      { from: "./src/assets", to: "assets" },
+    ]
+  })
 ];
 
 module.exports = {
@@ -67,24 +53,6 @@ module.exports = {
         test:  /\.s[ac]ss$/i,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
       },
-      {
-        test: /\.(jpe?g|png|gif|svg)$/i,
-        type: 'asset',
-      },
-      {
-        test: /\.(jpe?g|png|gif|svg)$/i,
-        use: [
-          {
-            loader: ImageMinimizerPlugin.loader,
-            options: {
-              severityError: 'warning', // Ignore errors on corrupted images
-              minimizerOptions: {
-                plugins: ['gifsicle'],
-              },
-            },
-          }
-        ]
-      }
     ]
   }
 }
