@@ -1,0 +1,12 @@
+@import './media_mixins.scss';
+
+body {
+  background-color: blue;
+}
+
+
+@include media_generator(tablet) {
+  body {
+    display: none;
+  }
+}

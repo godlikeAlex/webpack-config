@@ -1,0 +1,16 @@
+$break_points: (
+  "mobile": 640px,
+  "tablet": 768px,
+  "laptop": 1000px,
+  "pc": 1200px
+);
+
+@mixin media_generator($break_point) {
+  @each $point_name, $point in $break_points {
+    @if $point_name == $break_point {
+      @media (max-width: $point) {
+        @content;
+      }
+    }
+  }
+}
